@@ -28,5 +28,5 @@ save_dir: logs/virtual_sensing/${runname}/${dataset.name}/${model.name}/seed${se
 defaults:
     - _self_
     - default
-    - dataset: photovoltaic50   # clmdaily / clmhourly / aqchina / physionet2012 / photovoltaic
+    - dataset: clmhourly   # clmdaily / clmhourly / aqchina / physionet2012 / photovoltaic
     - model: ggnet
