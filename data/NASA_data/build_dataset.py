@@ -129,17 +129,17 @@ def build_one_NASA_fromAPI(lat:float,
 
 
 
-if __name__ == '__main__':
-    df = build_nasa(temporal='daily',
-                    start="19910101", end="20221231")
-    filename = 'data/NASA_data/clmDaily.pkl'
-    pickle.dump({'df':df}, open(filename, 'wb'))
-    print(f'data saved in {filename}')
-
-
 # if __name__ == '__main__':
-#     df = build_nasa(temporal='hourly',
-#                     start="20220101", end="20221231")
-#     filename = 'data/NASA_data/clmHourly.pkl'
+#     df = build_nasa(temporal='daily',
+#                     start="19910101", end="20221231")
+#     filename = 'data/NASA_data/clmDaily.pkl'
 #     pickle.dump({'df':df}, open(filename, 'wb'))
 #     print(f'data saved in {filename}')
+
+
+if __name__ == '__main__':
+    df = build_nasa(temporal='hourly',
+                    start="20220101", end="20221231")
+    filename = 'data/NASA_data/clmHourly.pkl'
+    pickle.dump({'df':df}, open(filename, 'wb'))
+    print(f'data saved in {filename}')
