@@ -7,6 +7,13 @@
 #    experimet:
 #        entity: ??? 
 
+wandb:
+   name: test--2024-08-07--19-09-31-clmHourly-ggnet
+   project: temp
+   offline: False
+   save_dir: logs/virtual_sensing/test--2024-08-07--19-09-31/clmHourly/ggnet/seed1
+   experimet:
+       entity: ??? 
 
 #### Imputation params ########################################################
 p_fault:   0.0
