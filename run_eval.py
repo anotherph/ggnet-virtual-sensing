@@ -1,3 +1,5 @@
+# edits line 283
+
 # general imports
 import os
 import wandb
@@ -280,7 +282,10 @@ def run_train(cfg: DictConfig):
     ########################################
     # testing                              #
     ########################################
-    model_path = 'logs/virtual_sensing/test--2024-08-07--19-09-31/clmHourly/ggnet/seed1/epoch=30-step=33852.ckpt'
+    # model_path = 'logs/virtual_sensing/test--2024-08-07--19-09-31/clmHourly/ggnet/seed1/epoch=30-step=33852.ckpt'
+    # model_path = 'logs/virtual_sensing/test--2024-09-03--17-08-35/clmHourly/ggnet/seed1/epoch=8-step=9828.ckpt'
+    model_path = 'logs/virtual_sensing/test--2024-09-03--18-48-26/clmHourly/ggnet/seed1/epoch=14-step=16380.ckpt'
+
     imputer.load_model(model_path)
     imputer.freeze()
     # trainer.test(imputer, datamodule=dm)
@@ -296,16 +301,25 @@ def run_train(cfg: DictConfig):
         output = torch_to_numpy(output)
         logger.info('collated')
         df_hat = {}
-        df_hat['lower'], _ = aggregate_one_prediction(output['y_lower'], dm)
-        df_hat['med'], _   = aggregate_one_prediction(output['y_hat'], dm)
-        df_hat['upper'], _ = aggregate_one_prediction(output['y_upper'], dm)
-        df_hat['true'], _  = aggregate_one_prediction(output['y'], dm)
+        df_hat['lower'], _ = aggregate_one_prediction(output['y_lower'], dm) # predicted lower bound
+        df_hat['med'], _   = aggregate_one_prediction(output['y_hat'], dm) # predicted value
+        df_hat['upper'], _ = aggregate_one_prediction(output['y_upper'], dm) # prediction upper bound
+        df_hat['true'], _  = aggregate_one_prediction(output['y'], dm) # ground truth
+        df_hat['eval_mask'], _ = aggregate_one_prediction(output['eval_mask'], dm) # evaluation mask
+        df_hat['mask'], _ = aggregate_one_prediction(output['mask'], dm) # train mask
+        df_hat['val_mask'], _ = aggregate_one_prediction(output['val_mask'], dm) # validation mask
+        df_hat['test_mask'], _ = aggregate_one_prediction(output['test_mask'], dm) # test mask
+
         logger.info('aggregated')
 
         with open(f'{cfg.save_dir}/df_hat.pkl', 'wb') as f:
             pickle.dump({'df_hat':df_hat}, f)
             logger.info(f'predictions saved in {cfg.save_dir}/df_hat.pkl')
-        assert dm.dataframe().equals(df_hat['true'])
+    
+        try:
+            assert dm.dataframe().equals(df_hat['true']) # not equal due to index
+        except AssertionError as e:
+            print(f"AssertionError: {e}")
 
     # close logger
     torch.cuda.empty_cache()

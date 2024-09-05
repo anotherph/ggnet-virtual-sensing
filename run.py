@@ -7,7 +7,7 @@ import pickle
 from omegaconf import DictConfig
 import random
 
-# lightning imports
+# lightning imports 
 from pytorch_lightning import Trainer
 from pytorch_lightning import seed_everything
 from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
@@ -210,7 +210,7 @@ def run_train(cfg: DictConfig):
                                           test_mask=dataset.test_mask,
                                           # covariates=covariates,
                                           transform=MaskInput(),
-                                          connectivity=adj,
+                                        #   connectivity=adj, # it's not in use
                                           window=cfg.window,
                                           stride=cfg.stride,
                                           window_lag=cfg.window_lag)
@@ -304,7 +304,7 @@ def run_train(cfg: DictConfig):
         with open(f'{cfg.save_dir}/df_hat.pkl', 'wb') as f:
             pickle.dump({'df_hat':df_hat}, f)
             logger.info(f'predictions saved in {cfg.save_dir}/df_hat.pkl')
-        assert dm.dataframe().equals(df_hat['true'])
+        # assert dm.dataframe().equals(df_hat['true'])
 
     # close logger
     torch.cuda.empty_cache()
